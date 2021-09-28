@@ -5,7 +5,7 @@ module.exports = {
 $channelSendMessage[$channelID;Başarıyla Log Kanalına Bildirdim, Eğer Aklına Güzel Fikirler Geliyosa f!öneri <önerin> şeklinde bize ulaştır]  
 $cooldown[1m;Spam Engellemek İçin 1 Dakikada Bir Verebilirsin]
 $argsCheck[>2;Öneriniz En Az 2 Kelimeden Oluşmalıdır.]
-$useChannel[860360406211362817]
+$useChannel[882649298955800627]
 $color[25C059]
 $footer[Öneriyi Yapan Kişi | $username / $authorID]
 

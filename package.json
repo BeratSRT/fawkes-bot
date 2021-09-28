@@ -1,5 +1,5 @@
 {
-  "name": "hello-node",
+  "name": "elyesa",
   "version": "0.0.1",
   "description": "A simple Node app built on fastify, instantly up and running.",
   "main": "server.js",
@@ -7,7 +7,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "aoi.js": "^4.4.4",
+    "aoi.js": "^4.5.0",
     "fs": "^0.0.2"
   },
   "engines": {

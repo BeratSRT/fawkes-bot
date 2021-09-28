@@ -2,8 +2,10 @@ const aoi = require('aoi.js');
 const fs = require('fs');
 const bot = new aoi.Bot({
 	token: process.env.TOKEN,
-	prefix: 'f!'
+	prefix: '$getServerVar[prefix]'
 });
+bot.onJoined()
+bot.onLeave()
 bot.onMessage();
 var reader = fs.readdirSync('./komutlar/').filter(file => file.endsWith('.js'));
 for (const file of reader) {
@@ -22,18 +24,86 @@ bot.status({
 	time: 12
 });
 bot.status({
-	text: ' 🌊Prefixim: f! | 🔥f!yardım |',
+	text: '🌊Prefixim: $getServerVar[prefix] | 🔥$getServerVar[prefix]yardım',
 	type: 'PLAYING',
 	status: 'dnd',
 	time: 12
 });
 bot.status({
-	text: '🍃f!davet | Beni Sunucuna Davet Et !',
+	text: '🍃$getServerVar[prefix]davet | Beni Sunucuna Davet Et !',
 	type: 'PLAYING',
 	status: 'dnd',
 	time: 12
 });
 //--------- OYNUYOR BÖLÜMÜ  SON------------\\
+bot.command({
+name: "yardım",
+code: `$reactionCollector[$splitText[1];everyone;1m;🔄,😂,👤,⚔️,💻,🤝;byardım,eğlencey,kullanıcıy,mody,yapımcıy,partnery;yes]
+$textSplit[$sendMessage[{title:Yardım Menüme Hoşgeldin}{footer:$username#$discriminator İstedi:$authorAvatar}{description:
+😂 - Eğlence ; Eğlence Komutlarını Atar
+
+👤 - Kullanıcı ; Herkesin Kullanabileceği Komutları Atar
+
+⚔️ - Moderasyon ; Sunucu Ayarları İçin Komutları Atar
+
+💻 - Yapımcı ; Sadece Yapımcının Kullanabilceği Komutları Atar
+
+🤝 - Partner ; Partner Komutlarını Atar
+} {color:000046};yes]; ]`})
+bot.awaitedCommand({
+ name: "byardım",
+ code: `$editMessage[$message[1];{title:Yardım}{footer:$username#$discriminator İstedi:$authorAvatar}{description:
+😂 - Eğlence: Eğlence Komutlarını Atar
+
+👤 - Kullanıcı: Herkesin Kullanabileceği Komutları Atar
+
+⚔️ - Moderasyon: Sunucu Ayarları İçin Komutları Atar
+
+💻 - Yapımcı: Sadece Yapımcının Kullanabilceği Komutları Atar
+
+🤝 - Partner: Partner Komutlarını Atar} {color:000046}
+]
+`})
+bot.awaitedCommand({
+ name: "eğlencey",
+ code: `
+ $editMessage[$message[1];{footer:🔄 - Menüye Dönmek İçin Tıklayın}
+{author:Eğlence Komutlarıma Hoşgeldin $username:$authorAvatar} {description:\`$getServerVar[prefix]düello\`, \`$getServerVar[prefix]aşkölçer\`, \`$getServerVar[prefix]amongus\`} {color:000046} 
+]
+ `
+})
+bot.awaitedCommand({
+ name: "kullanıcıy",
+ code: `
+ $editMessage[$message[1];{footer:🔄 - Menüye Dönmek İçin Tıklayın}
+{author:Kullanıcı Komutlarıma Hoşgeldin $username:$authorAvatar} {description: \`$getServerVar[prefix]profil\`, \`$getServerVar[prefix]banlist\`, \`$getServerVar[prefix]davet\`, \`$getServerVar[prefix]istatistik\`, \`$getServerVar[prefix]öneri\`} {color:000046} 
+]
+ `
+})
+bot.awaitedCommand({
+ name: "mody",
+ code: `
+ $editMessage[$message[1];{footer:🔄 - Menüye Dönmek İçin Tıklayın}
+{author:Moderasyon Komutlarıma Hoşgeldin $username:$authorAvatar} {description:\`$getServerVar[prefix]ayarla\`, \`$getServerVar[prefix]abone\`, \`$getServerVar[prefix]ban\`, \`$getServerVar[prefix]sil\`, \`$getServerVar[prefix]forceban\`, \`$getServerVar[prefix]unban\`, \`$getServerVar[prefix]çekiliş\`, \`$getServerVar[prefix]kick\`, \`$getServerVar[prefix]uyarı\`, \`$getServerVar[prefix]uyarısil\`, \`$getServerVar[prefix]uyarılar\`} {color:000046} 
+]
+ `
+})
+bot.awaitedCommand({
+  name: "yapımcıy",
+  code:`
+  $editMessage[$message[1];{footer:🔄 - Menüye Dönmek İçin Tıklayın}
+{author:Yapımcı Komutlarıma Hoşgeldin $username:$authorAvatar} {description:\`$getServerVar[prefix]eval\`} {color:000046} 
+]
+  `
+})
+bot.awaitedCommand({
+  name: "partnery",
+  code:`
+  $editMessage[$message[1];{footer:🔄 - Menüye Dönmek İçin Tıklayın}
+{author:Partner Komutlarıma Hoşgeldin $username:$authorAvatar} {description:\`$getServerVar[prefix]partner-bul\`, \`$getServerVar[prefix]partner\`, \`$getServerVar[prefix]ayarlar\`, \`$getServerVar[prefix]onayla\`, \`$getServerVar[prefix]reddet\`} {color:000046} 
+]
+`
+})
 bot.command({
   name:"abone",
   code:`
@@ -102,6 +172,7 @@ bot.command({
 //-----------------VARİBLELER---------------\\
 bot.variables({
 	saas: 'kapalı',
+  prefix: 'e+',
 	emojimenüler: '',
 	emojiroller: '',
 	can: '100',
@@ -126,11 +197,26 @@ bot.variables({
   abonerol: 'yok',
   abonekanal: 'yok',
   premium: "hayır",
-  brol:"",
-  bkanal:"",
-  drol:"",
-  yrol:"",
-  blog:""
+  tuyarı: "0",
+  uyarı:"",
+  topab: "0",
+  botlog:"882649300562219049",//bot log kanalı idsi
+  botkanal:"882670082008973322",//bot ekle kanalı idsi
+  botyetkili:"882649251463708703",//yetkili ıdsi
+  başvuranbotu:"",//burayı boş bırak
+  ab:"",
+  //partner
+  psorumlusu:"",
+  psorumlusuu:"hayır",
+  ptext:"",
+  ptextt:"hayır",
+  pkanal:"",
+  pkanall:"hayır",
+  plog:"",
+  plogg:"hayır",
+  partner:"kapalı",
+  ps:"no",
+  para:"5"
 });
 //----------------VARİBLELER SON-------------\\
 bot.command({
@@ -139,15 +225,17 @@ bot.command({
 $onlyForIDs[525539487774801921;Bu Komutu Sadece Sahibim Kullanabilir]`,
 	nonPrefixed: false
 });
-
-//--------------------- DİĞER KOMUTLAR -------------------------\\
-bot.joinCommand({
-  channel:"yarra",
+bot.leaveCommand({
+  channel:"882649300562219049",
   code:`
-  $giveRoles[$authorID;$getServerVar[brol]]
-  $onlyIf[$isBot[$authorID]==true;]
-  `
-})
+  $author[Baybay $userTag ve botu $userTag[$getServerVar[başvuranbotu;$authorID]];$authorAvatar]
+  $description[$userTag sunucudan ayrıldığı için botu $userTag[$getServerVar[başvuranbotu;$authorID]] sunucudan atıldı]
+  $color[GREEN]
+  $kick[$getServerVar[başvuranbotu;$authorID]]
+  $suppressErrors
+`
+  })
+//--------------------- DİĞER KOMUTLAR -------------------------\\
 bot.command({
 	name: 'aşkölçer',
 	aliases: ['aşk', 'love', 'lovecheck'],
@@ -317,8 +405,10 @@ bot.command({
  $addField[Oluşturulma Tarihim; $creationDate[$clientID]]
   
  $addField[Pingim; $ping]
- $addField[Çalışma Sürem; $replaceText[$replaceText[$replaceText[$uptime;s; Saniye;-1];h; Saat;-1];m; Dakika;-1] ;yes]  Komut Sayım = $commandsCount
+ $addField[Çalışma Sürem; $replaceText[$replaceText[$replaceText[$uptime;s; Saniye;-1];h; Saat;-1];m; Dakika;-1] ;yes]
+ $addField[Komut Sayım; $commandsCount]
  $addField[Bulunduğum Sunucu Sayısı; $serverCount]
+ $addField[Toplam Kullanıcım; $allMembersCount]
   
   
   ]
@@ -343,7 +433,7 @@ bot.command({
   $onlyIf[$mentioned[1]!=$clientID;{title:❗️Beni Atamazsın❗️}{color:00FF00}{delete:5s}]
   $onlyIf[$mentioned[1]!=$ownerID;{title:❗️Sunucu Sahibini Atamazsın❗️}{color:00FF00}{delete:5s}]
   $onlyIf[$mentioned[1]!=$authorID;{title:❗️Kendini Atamazsın❗️}{color:00FF00}{delete:5s}]
-  $onlyIf[$mentioned[1]!=;{title:❗️Yanlış Kullanım❗️}{description:✅Doğru Kullanım: f!kick @kişi sebep(isteğe bağlı) }{color:00FF00}{delete:5s}]
+  $onlyIf[$mentioned[1]!=;{title:❗️Yanlış Kullanım❗️}{description:✅Doğru Kullanım: $getServerVar[prefix]kick @kişi sebep(isteğe bağlı) }{color:00FF00}{delete:5s}]
   `
 });
 bot.awaitedCommand({
@@ -361,7 +451,7 @@ bot.awaitedCommand({
   `
 });
 bot.awaitedCommand({
-	name: 'banhayır',
+	name: 'kickhayır',
 	code: `
 
   $clearReactions[$channelID;$message[1];✅]
@@ -390,7 +480,7 @@ bot.command({
   $onlyIf[$mentioned[1]!=$clientID;{title:❗️Beni Banlayamazsın❗️}{color:00FF00}{delete:5s}]
   $onlyIf[$mentioned[1]!=$ownerID;{title:❗️Sunucu Sahibini Banlayamazsın❗️}{color:00FF00}{delete:5s}{delete:5s}]
   $onlyIf[$mentioned[1]!=$authorID;{title:❗️Kendini Banlayamazsın❗️}{color:00FF00}{delete:5s}]
-  $onlyIf[$mentioned[1]!=;{title:❗️Yanlış Kullanım❗️}{description:✅Doğru Kullanım: f!ban @kişi sebep(isteğe bağlı)}{color:00FF00}{delete:5s}]
+  $onlyIf[$mentioned[1]!=;{title:❗️Yanlış Kullanım❗️}{description:✅Doğru Kullanım: $getServerVar[prefix]ban @kişi sebep(isteğe bağlı)}{color:00FF00}{delete:5s}]
   `
 });
 bot.awaitedCommand({

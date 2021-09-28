@@ -1,19 +1,26 @@
-module.exports = ({
-name:"yardım",
-aliases:['help'],
-bkz:"Fawkes Yardım Menüsü",
-code:`$footer[$username[$clientID] Yardım Menüsü;$userAvatar[$clientID]]
-$thumbnail[$userAvatar[$clientID]]
-$color[BDAAF9]
+module.exports = ({ 
+  name: "yardım",
+  code:`
+$thumbnail[$userAvatar[$mentioned[1;yes]]]
+$title[$username[$clientID] Yardım Menüsü ]
+$color[#0000ff]
+$footer[Komutu Kullanan : $username ]
 $description[
-$addField[Yapımcı;\`f!eval\`;yes]
 
-$addField[Eğlence;\`f!düello\`, \`f!aşkölçer\`, \`f!amongus\`;yes]
 
-$addField[Abone Sistem.;\`f!ayarla\`, \`f!abone\`]
+\`$getServerVar[prefix]eğlence\` **Eğlence Komutlarını Görüntülersin**
 
-$addField[Kullanıcı;\`f!profil\`, \`f!banlist\`, \`f!davet\`, \`f!istatistik\`, \`f!öneri\`, \`f!botlist-yardım\`]
+\`$getServerVar[prefix]kullanıcı\` **Kullanıcı Komutlarını Görüntülersin**
 
-$addField[Moderasyon;\`f!ban\`, \`f!sil\`, \`f!forceban\`, \`f!unban\`, \`f!çekiliş\`, \`f!kick\`]
-$author[$userTag[$authorid];$authorAvatar]`
-})
+\`$getServerVar[prefix]moderasyon\` **Moderasyon Komutlarını Görüntülersin**
+
+\`$getServerVar[prefix]yapımcı\` **Yapımcı Komutlarını Görüntülersin**
+
+\`$getServerVar[prefix]ekonomi\` **Ekonomi komutlarıni görüntülersiniz**(yakında)
+
+\`$getServerVar[prefix]partner\` **Partner Komutlarını Görüntülersin**
+
+
+»Botu kendi sunucuna eklemek için [Tıkla](https://discord.com/oauth2/authorize?client_id=$clientID&scope=bot&permissions=8)
+»Destek sunucusuna gelmek için [Tıkla](https://discord.gg/ryEJVzzBQg)]
+`})
